@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">factviewer</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="menu_cats">Cats</string>
+    <string name="menu_dogs">Dogs</string>
+    <string name="menu_nails">Nails</string>
+    <string name="menu_horses">Horses</string>
+    <string name="menu_chosen">Chosen</string>
+</resources>
