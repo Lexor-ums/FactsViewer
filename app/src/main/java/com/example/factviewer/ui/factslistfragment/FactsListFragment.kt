@@ -14,12 +14,18 @@ import com.example.factviewer.ui.MainActivity
 import com.example.factviewer.ui.factdetailsfragment.FactDetailsFragment
 import com.example.factviewer.ui.presenters.FactsListPresenter
 import com.example.factviewer.ui.presenters.ItemSelectorPresenter
+import com.example.factviewer.ui.presenters.LikePresenter
 import com.example.factviewer.ui.views.FactListView
 import com.example.factviewer.ui.views.ItemSelectorView
+import com.example.factviewer.ui.views.LikeView
 import kotlinx.android.synthetic.main.fact_list_fragment.*
 import kotlinx.android.synthetic.main.fact_list_fragment.view.*
 
-class FactsListFragment : MvpAppCompatFragment() , FactListView, ItemSelectorView {
+class FactsListFragment(private val animal : String) : MvpAppCompatFragment() , FactListView, ItemSelectorView, LikeView {
+
+    private var previousAnimal  = ""
+    override fun onLikeClick(isLiked: Boolean) {
+    }
 
     private val adapter = FactListAdapter()
 
@@ -29,13 +35,22 @@ class FactsListFragment : MvpAppCompatFragment() , FactListView, ItemSelectorVie
     @InjectPresenter
     lateinit var itemSelectorPresenter: ItemSelectorPresenter
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    @InjectPresenter
+    lateinit var likePresenter: LikePresenter
+
+    override fun onResume() {
+        super.onResume()
+        if(previousAnimal != animal) {
+            factsListPresenter.setAnimal(animal)
+            factsListPresenter.loadData()
+        }
+        previousAnimal = animal
     }
 
     override fun onCreateView(inflater : LayoutInflater, container: ViewGroup?, savedInstanceState :Bundle?) : View?{
         val view = inflater.inflate(R.layout.fact_list_fragment, container, false)
         adapter.setOnClickListener(itemSelectorPresenter::onListItemSelected)
+        adapter.setLikeClicker(likePresenter::updateLike)
         view.listRecyclerView.adapter = adapter
         return view
     }

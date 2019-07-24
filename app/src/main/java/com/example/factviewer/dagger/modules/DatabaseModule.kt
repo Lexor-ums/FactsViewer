@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.room.Room
 import com.example.factviewer.domain.database.AnimalFactsDAO
 import com.example.factviewer.domain.database.AnimalFactsDatabase
+import com.example.factviewer.domain.database.LikesDao
 import com.example.factviewer.utils.DB_NAME
 import dagger.Module
 import dagger.Provides
@@ -23,4 +24,7 @@ class DatabaseModule {
     @Provides
     @Singleton
     fun provideAnimalFactsDAO(currencyDatabase: AnimalFactsDatabase): AnimalFactsDAO = currencyDatabase.animalFactsDAO()
+    @Provides
+    @Singleton
+    fun provideLikesDAO(currencyDatabase: AnimalFactsDatabase): LikesDao = currencyDatabase.likesDAO()
 }

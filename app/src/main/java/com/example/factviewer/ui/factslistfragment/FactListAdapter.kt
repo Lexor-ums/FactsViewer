@@ -1,24 +1,43 @@
 package com.example.factviewer.ui.factslistfragment
 
+import android.app.Application
+import android.graphics.Bitmap
+import android.graphics.drawable.BitmapDrawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.arellomobile.mvp.presenter.InjectPresenter
+import com.arellomobile.mvp.presenter.PresenterType
+import com.example.factviewer.MainApplication
 import com.example.factviewer.R
 import com.example.factviewer.domain.animalfact.AnimalFact
+import com.example.factviewer.ui.presenters.LikePresenter
+import com.example.factviewer.ui.views.LikeView
 import kotlinx.android.synthetic.main.fact_item.view.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import javax.inject.Inject
 import kotlin.coroutines.CoroutineContext
 
 class FactListAdapter : RecyclerView.Adapter<FactListAdapter.FactListHolder>() {
-    private var clickListener : (Int, String) -> Unit = { i: Int, s: String -> }
 
-    fun setOnClickListener(listener : (Int, String) -> Unit){
+
+    private var clickListener: (Int, String) -> Unit = { _: Int, _: String -> }
+
+    private var likeClicker: (String, Boolean) -> Unit = { _: String, _: Boolean -> }
+
+    fun setOnClickListener(listener: (Int, String) -> Unit) {
         clickListener = listener
     }
+
+    fun setLikeClicker(clicker: (String, Boolean) -> Unit) {
+        likeClicker = clicker
+    }
+
     private var facts: List<AnimalFact> = listOf()
     fun addFacts(facts: List<AnimalFact>) {
         this.facts = facts
@@ -33,23 +52,57 @@ class FactListAdapter : RecyclerView.Adapter<FactListAdapter.FactListHolder>() {
         val factItem = facts[position]
         holder.factTxt.text = factItem.content
         holder.time.text = factItem.time
+        holder.setLikeState(factItem.isLiked)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FactListHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.fact_item, parent, false)
-        return FactListHolder(view, clickListener)
+        return FactListHolder(view, clickListener, likeClicker )
     }
 
-    class FactListHolder(itemView: View, private val clickListener: (Int, String) -> Unit) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
+    class FactListHolder(
+        itemView: View, private val clickListener: (Int, String) -> Unit,
+        private val clicker: (String, Boolean) -> Unit ) :
+        RecyclerView.ViewHolder(itemView), View.OnClickListener {
+        private var isLiked = false
+        var factTxt = itemView.textViewFact as TextView
+        var time = itemView.editTextTime as TextView
+        private var button: ImageButton = itemView.likeButton
+
         init {
             itemView.setOnClickListener(this)
+
+            button.setOnClickListener {
+                if(isLiked)
+                    isLiked = false
+                else if (!isLiked)
+                    isLiked = true
+                setLikeState(isLiked)
+                clicker.invoke(time.text.toString(), isLiked)
+            }
         }
+
+        fun setLikeState(likeState : Boolean){
+            isLiked = likeState
+            when (isLiked) {
+                true -> button.setImageDrawable(
+                    MainApplication.instance.getRsources().getDrawable(
+                        android.R.drawable.star_big_on,
+                        null
+                    )
+                )
+                false -> button.setImageDrawable(
+                    MainApplication.instance.getRsources().getDrawable(
+                        android.R.drawable.star_big_off,
+                        null
+                    )
+                )
+            }
+        }
+
         override fun onClick(v: View?) {
             clickListener.invoke(adapterPosition, time.text.toString())
         }
-
-        var factTxt = itemView.textViewFact as TextView
-        var time = itemView.editTextTime as TextView
     }
 }
 

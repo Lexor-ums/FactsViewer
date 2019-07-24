@@ -2,6 +2,7 @@ package com.example.factviewer.dagger.modules
 
 import com.example.factviewer.api.AnimalFactsApi
 import com.example.factviewer.domain.database.AnimalFactsDatabase
+import com.example.factviewer.domain.database.LikesDao
 import com.example.factviewer.domain.repository.AnimalRepository
 import dagger.Module
 import dagger.Provides
@@ -11,6 +12,10 @@ import javax.inject.Singleton
 class RepositoryModule {
     @Provides
     @Singleton
-    fun provideAnimalFactsRepository(currencyDatabase: AnimalFactsDatabase, api : AnimalFactsApi): AnimalRepository =
-        AnimalRepository(currencyDatabase.animalFactsDAO(), api)
+    fun provideAnimalFactsRepository(
+        currencyDatabase: AnimalFactsDatabase,
+        api: AnimalFactsApi,
+        likesDao: LikesDao
+    ): AnimalRepository =
+        AnimalRepository(currencyDatabase.animalFactsDAO(), api, likesDao)
 }

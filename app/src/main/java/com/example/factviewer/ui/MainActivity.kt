@@ -5,7 +5,6 @@ import androidx.core.view.GravityCompat
 import androidx.appcompat.app.ActionBarDrawerToggle
 import android.view.MenuItem
 import com.google.android.material.navigation.NavigationView
-import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import android.view.Menu
 import com.arellomobile.mvp.MvpAppCompatActivity
@@ -13,16 +12,9 @@ import com.arellomobile.mvp.presenter.InjectPresenter
 import com.example.calculator.utils.FragmentUtils
 import com.example.factviewer.R
 import com.example.factviewer.ui.factslistfragment.FactsListFragment
-import com.example.factviewer.ui.presenters.ItemSelectorPresenter
-import com.example.factviewer.ui.views.ItemSelectorView
+import com.example.factviewer.utils.*
 
-class MainActivity : MvpAppCompatActivity(), NavigationView.OnNavigationItemSelectedListener, ItemSelectorView{
-
-    @InjectPresenter
-    lateinit var itemSelectorPresenter: ItemSelectorPresenter
-    override fun onItemSelected(position: Int, id: String) {
-        println("selected pos in main activity $position")
-    }
+class MainActivity : MvpAppCompatActivity(), NavigationView.OnNavigationItemSelectedListener{
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,7 +33,6 @@ class MainActivity : MvpAppCompatActivity(), NavigationView.OnNavigationItemSele
         toggle.syncState()
 
         navView.setNavigationItemSelectedListener(this)
-        FragmentUtils.replaceFragment(this, FactsListFragment(), R.id.mainFrame, false)
     }
 
     override fun onBackPressed() {
@@ -72,7 +63,11 @@ class MainActivity : MvpAppCompatActivity(), NavigationView.OnNavigationItemSele
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         // Handle navigation view item clicks here.
         when (item.itemId) {
-
+            R.id.nav_cats -> FragmentUtils.replaceFragment(this, FactsListFragment(ANIMAL_CATS), R.id.mainFrame, false)
+            R.id.nav_dogs -> FragmentUtils.replaceFragment(this, FactsListFragment(ANIMAL_DOGS), R.id.mainFrame, false)
+            R.id.nav_nails -> FragmentUtils.replaceFragment(this, FactsListFragment(ANIMAL_SNAILS), R.id.mainFrame, false)
+            R.id.nav_horses-> FragmentUtils.replaceFragment(this, FactsListFragment(ANIMAL_HORSES), R.id.mainFrame, false)
+            R.id.nav_chosen-> FragmentUtils.replaceFragment(this, FactsListFragment(ANIMAL_CHOSEN), R.id.mainFrame, false)
         }
         val drawerLayout: androidx.drawerlayout.widget.DrawerLayout = findViewById(R.id.drawer_layout)
         drawerLayout.closeDrawer(GravityCompat.START)

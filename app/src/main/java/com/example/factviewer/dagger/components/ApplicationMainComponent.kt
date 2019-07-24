@@ -11,6 +11,7 @@ import javax.inject.Singleton
 import android.app.Application
 import com.example.factviewer.ui.presenters.DetailsPresenter
 import com.example.factviewer.ui.presenters.FactsListPresenter
+import com.example.factviewer.ui.presenters.LikePresenter
 import dagger.BindsInstance
 
 
@@ -25,6 +26,7 @@ interface ApplicationMainComponent {
     fun inject(app: MainApplication)
     fun inject(factsListPresenter : FactsListPresenter)
     fun inject(detailsPresenter : DetailsPresenter)
+    fun inject(likesPresenter : LikePresenter)
 
     @Component.Builder
     interface Builder {

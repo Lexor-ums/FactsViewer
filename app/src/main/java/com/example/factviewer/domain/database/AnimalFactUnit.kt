@@ -12,9 +12,5 @@ data class AnimalFactUnit (
     @field:SerializedName("animal")
     var animal : String = "",
     @field:SerializedName("fact")
-    var fact : String = "",
-    @field:SerializedName("isliked")
-    @Ignore
-    var isLiked : Boolean = false
-
+    var fact : String = ""
 )
