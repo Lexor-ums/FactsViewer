@@ -9,6 +9,9 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+/**
+ * презентер, обесепечивающий функционал нажатия на кнопку лайка
+ */
 @InjectViewState
 class LikePresenter : BaseMvpPresenter<LikeView>(){
     @Inject
@@ -17,6 +20,11 @@ class LikePresenter : BaseMvpPresenter<LikeView>(){
         MainApplication.instance.getAppComponent()?.inject(this)
     }
 
+    /**
+     * обработка нажатия на кнопку лайка
+     * @param id уникальный идентификаор записи
+     * @param isLiked состояние
+     */
     fun updateLike(id : String, isLiked : Boolean){
         GlobalScope.launch {
             repository.updateLike(id, isLiked)

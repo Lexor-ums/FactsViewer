@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import com.arellomobile.mvp.MvpAppCompatFragment
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.example.calculator.utils.FragmentUtils
-import com.example.factviewer.MainApplication
 import com.example.factviewer.R
 import com.example.factviewer.domain.animalfact.AnimalFact
 import com.example.factviewer.ui.MainActivity
@@ -21,16 +20,14 @@ import com.example.factviewer.ui.views.LikeView
 import kotlinx.android.synthetic.main.fact_list_fragment.*
 import kotlinx.android.synthetic.main.fact_list_fragment.view.*
 
-class FactsListFragment(private val animal : String) : MvpAppCompatFragment() , FactListView, ItemSelectorView, LikeView {
+class FactsListFragment(private val animal: String) : MvpAppCompatFragment(), FactListView, ItemSelectorView, LikeView {
 
-    private var previousAnimal  = ""
-    override fun onLikeClick(isLiked: Boolean) {
-    }
+    private var previousAnimal = ""
 
     private val adapter = FactListAdapter()
 
     @InjectPresenter
-    lateinit var factsListPresenter : FactsListPresenter
+    lateinit var factsListPresenter: FactsListPresenter
 
     @InjectPresenter
     lateinit var itemSelectorPresenter: ItemSelectorPresenter
@@ -40,19 +37,22 @@ class FactsListFragment(private val animal : String) : MvpAppCompatFragment() , 
 
     override fun onResume() {
         super.onResume()
-        if(previousAnimal != animal) {
+        if (previousAnimal != animal) {
             factsListPresenter.setAnimal(animal)
             factsListPresenter.loadData()
         }
         previousAnimal = animal
     }
 
-    override fun onCreateView(inflater : LayoutInflater, container: ViewGroup?, savedInstanceState :Bundle?) : View?{
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fact_list_fragment, container, false)
         adapter.setOnClickListener(itemSelectorPresenter::onListItemSelected)
         adapter.setLikeClicker(likePresenter::updateLike)
         view.listRecyclerView.adapter = adapter
         return view
+    }
+
+    override fun onLikeClick(isLiked: Boolean) {
     }
 
     override fun showError() {
@@ -70,7 +70,6 @@ class FactsListFragment(private val animal : String) : MvpAppCompatFragment() , 
     }
 
     override fun onItemSelected(position: Int, id: String) {
-        println("selected pos $position")
         FragmentUtils.replaceFragment(activity as MainActivity, FactDetailsFragment(id), R.id.mainFrame, true)
 
     }

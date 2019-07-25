@@ -1,27 +1,15 @@
 package com.example.factviewer.ui.factslistfragment
 
-import android.app.Application
-import android.graphics.Bitmap
-import android.graphics.drawable.BitmapDrawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.arellomobile.mvp.presenter.InjectPresenter
-import com.arellomobile.mvp.presenter.PresenterType
 import com.example.factviewer.MainApplication
 import com.example.factviewer.R
 import com.example.factviewer.domain.animalfact.AnimalFact
-import com.example.factviewer.ui.presenters.LikePresenter
-import com.example.factviewer.ui.views.LikeView
 import kotlinx.android.synthetic.main.fact_item.view.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import javax.inject.Inject
-import kotlin.coroutines.CoroutineContext
 
 class FactListAdapter : RecyclerView.Adapter<FactListAdapter.FactListHolder>() {
 
@@ -30,15 +18,28 @@ class FactListAdapter : RecyclerView.Adapter<FactListAdapter.FactListHolder>() {
 
     private var likeClicker: (String, Boolean) -> Unit = { _: String, _: Boolean -> }
 
+    private var facts: List<AnimalFact> = listOf()
+
+    /**
+     * уснатовка обработчика сибытия выбора элемента из списка
+     * @param listener ссылка на функцию-обработчик
+     */
     fun setOnClickListener(listener: (Int, String) -> Unit) {
         clickListener = listener
     }
 
+    /**
+     * установка обраьотчика события нажатия на кнопку лайка
+     * @param clicker - ссылка на функцию -обработчик
+     */
     fun setLikeClicker(clicker: (String, Boolean) -> Unit) {
         likeClicker = clicker
     }
 
-    private var facts: List<AnimalFact> = listOf()
+    /**
+     * загрузка списка фактов в адаптер
+     * @param facts - список фактов
+     */
     fun addFacts(facts: List<AnimalFact>) {
         this.facts = facts
         notifyDataSetChanged()
@@ -51,18 +52,19 @@ class FactListAdapter : RecyclerView.Adapter<FactListAdapter.FactListHolder>() {
     override fun onBindViewHolder(holder: FactListHolder, position: Int) {
         val factItem = facts[position]
         holder.factTxt.text = factItem.content
-        holder.time.text = factItem.time
+        holder.time.text = factItem.id
         holder.setLikeState(factItem.isLiked)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FactListHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.fact_item, parent, false)
-        return FactListHolder(view, clickListener, likeClicker )
+        return FactListHolder(view, clickListener, likeClicker)
     }
 
     class FactListHolder(
         itemView: View, private val clickListener: (Int, String) -> Unit,
-        private val clicker: (String, Boolean) -> Unit ) :
+        private val clicker: (String, Boolean) -> Unit
+    ) :
         RecyclerView.ViewHolder(itemView), View.OnClickListener {
         private var isLiked = false
         var factTxt = itemView.textViewFact as TextView
@@ -73,7 +75,7 @@ class FactListAdapter : RecyclerView.Adapter<FactListAdapter.FactListHolder>() {
             itemView.setOnClickListener(this)
 
             button.setOnClickListener {
-                if(isLiked)
+                if (isLiked)
                     isLiked = false
                 else if (!isLiked)
                     isLiked = true
@@ -82,7 +84,12 @@ class FactListAdapter : RecyclerView.Adapter<FactListAdapter.FactListHolder>() {
             }
         }
 
-        fun setLikeState(likeState : Boolean){
+        /**
+         * установка состояния кнопки лайка
+         * @param likeState - состояние нажатия
+         */
+
+        fun setLikeState(likeState: Boolean) {
             isLiked = likeState
             when (isLiked) {
                 true -> button.setImageDrawable(

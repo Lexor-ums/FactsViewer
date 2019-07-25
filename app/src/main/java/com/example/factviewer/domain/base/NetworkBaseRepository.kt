@@ -5,12 +5,19 @@ import retrofit2.Response
 import java.io.IOException
 
 open class NetworkBaseRepository {
+    /**
+     * асинхронный вызов функций АПИ
+     * @param call - ссылка на функцию из АПИ
+     * @param errorMessage 0 сообщение оюб ошибке
+     * @return структура данных
+     */
+
     suspend fun <T : Any> safeApiCall(call: suspend () -> Response<T>, errorMessage: String): T? {
 
-        val result : RequestResult<T> = safeApiResult(call,errorMessage)
-        var data : T? = null
+        val result: RequestResult<T> = safeApiResult(call, errorMessage)
+        var data: T? = null
 
-        when(result) {
+        when (result) {
             is RequestResult.Success ->
                 data = result.data
             is RequestResult.Error -> {
@@ -20,9 +27,12 @@ open class NetworkBaseRepository {
         return data
     }
 
-    private suspend fun <T: Any> safeApiResult(call: suspend ()-> Response<T>, errorMessage: String) : RequestResult<T>{
+    private suspend fun <T : Any> safeApiResult(
+        call: suspend () -> Response<T>,
+        errorMessage: String
+    ): RequestResult<T> {
         val response = call.invoke()
-        if(response.isSuccessful) return RequestResult.Success(response.body()!!)
+        if (response.isSuccessful) return RequestResult.Success(response.body()!!)
 
         return RequestResult.Error(IOException("Error Occurred during getting safe Api result, Custom ERROR - $errorMessage"))
     }

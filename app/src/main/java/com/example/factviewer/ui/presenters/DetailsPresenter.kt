@@ -8,6 +8,9 @@ import com.example.factviewer.ui.views.DetailView
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+/**
+ * Презентер view отображения деталей статьи
+ */
 @InjectViewState
 class DetailsPresenter : BaseMvpPresenter<DetailView>(){
     @Inject
@@ -17,6 +20,11 @@ class DetailsPresenter : BaseMvpPresenter<DetailView>(){
         MainApplication.instance.getAppComponent()?.inject(this)
 
     }
+
+    /**
+     * Загрузка статьи
+     * @param id - уникальный идентификатор статьи
+     */
     fun loadDetail(id : String){
         scope.launch {
             val request = repository.getById(id)
