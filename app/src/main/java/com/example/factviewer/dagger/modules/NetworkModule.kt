@@ -1,7 +1,7 @@
 package com.example.factviewer.dagger.modules
 
 
-import com.example.factviewer.api.AnimalFactsApi
+import com.example.factviewer.data.network.AnimalFactsApi
 import com.example.factviewer.utils.BASE_URL
 import com.example.factviewer.utils.REQUEST_TIMEOUT
 import com.google.gson.FieldNamingPolicy

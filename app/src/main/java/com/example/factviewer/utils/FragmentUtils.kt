@@ -2,7 +2,6 @@ package com.example.calculator.utils
 
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import com.example.factviewer.ui.factslistfragment.FactsListFragment
 
 class FragmentUtils {
     companion object {

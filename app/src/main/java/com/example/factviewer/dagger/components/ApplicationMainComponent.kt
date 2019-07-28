@@ -9,9 +9,9 @@ import dagger.Component
 import dagger.android.support.AndroidSupportInjectionModule
 import javax.inject.Singleton
 import android.app.Application
-import com.example.factviewer.ui.presenters.DetailsPresenter
-import com.example.factviewer.ui.presenters.FactsListPresenter
-import com.example.factviewer.ui.presenters.LikePresenter
+import com.example.factviewer.presentation.factdetailsfragment.DetailsPresenter
+import com.example.factviewer.presentation.factslistfragment.FactsListPresenter
+import com.example.factviewer.presentation.common.LikePresenter
 import dagger.BindsInstance
 
 

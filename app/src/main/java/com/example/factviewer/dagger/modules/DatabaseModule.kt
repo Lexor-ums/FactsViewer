@@ -2,9 +2,9 @@ package com.example.factviewer.dagger.modules
 
 import android.app.Application
 import androidx.room.Room
-import com.example.factviewer.domain.database.AnimalFactsDAO
-import com.example.factviewer.domain.database.AnimalFactsDatabase
-import com.example.factviewer.domain.database.LikesDao
+import com.example.factviewer.data.database.dao.AnimalFactsDAO
+import com.example.factviewer.data.database.AnimalFactsDatabase
+import com.example.factviewer.data.database.dao.LikesDao
 import com.example.factviewer.utils.DB_NAME
 import dagger.Module
 import dagger.Provides

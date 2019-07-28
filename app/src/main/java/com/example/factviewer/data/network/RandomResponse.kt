@@ -1,0 +1,13 @@
+package com.example.factviewer.data.network
+
+data class Fact (
+    val _id :String,
+    val __v  :Int,
+    val text :String,
+    val delete :Boolean,
+    val source :String,
+    val used : Boolean,
+    val type: String,
+    val updatedAt : String,
+    val createdAt : String
+)
