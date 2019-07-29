@@ -1,7 +1,9 @@
 package com.example.factviewer
 
+import android.annotation.SuppressLint
 import android.app.Application
 import android.content.res.Resources
+import com.example.calculator.utils.navigation.fragmentrouter.FragmentRouter
 import com.example.factviewer.dagger.components.ApplicationMainComponent
 import com.example.factviewer.dagger.components.DaggerApplicationMainComponent
 import dagger.android.AndroidInjector
@@ -9,7 +11,7 @@ import dagger.android.DispatchingAndroidInjector
 import dagger.android.HasAndroidInjector
 import javax.inject.Inject
 
-class MainApplication : Application(), HasAndroidInjector{
+class MainApplication : Application(), HasAndroidInjector {
 
     @Inject
     lateinit var androidInjector: DispatchingAndroidInjector<Any>
@@ -27,18 +29,21 @@ class MainApplication : Application(), HasAndroidInjector{
         appComponent!!.inject(this);
     }
 
-    fun getRsources() : Resources{
+    fun getRsources(): Resources {
         return appResources
     }
 
-    fun getAppComponent() : ApplicationMainComponent? {
+    fun getAppComponent(): ApplicationMainComponent? {
         return appComponent
     }
+
+    override fun androidInjector(): AndroidInjector<Any> = androidInjector
+
     companion object {
         lateinit var instance: MainApplication
             private set
+
+        @SuppressLint("StaticFieldLeak")
+        var fragmentRouter = FragmentRouter()
     }
-
-    override fun androidInjector(): AndroidInjector<Any> =  androidInjector
-
 }

@@ -6,11 +6,10 @@ import android.view.View
 import android.view.ViewGroup
 import com.arellomobile.mvp.MvpAppCompatFragment
 import com.arellomobile.mvp.presenter.InjectPresenter
-import com.example.calculator.utils.FragmentUtils
+import com.example.calculator.utils.navigation.fragmentrouter.Screens
+import com.example.factviewer.MainApplication.Companion.fragmentRouter
 import com.example.factviewer.R
 import com.example.factviewer.data.application.AnimalFact
-import com.example.factviewer.presentation.MainActivity
-import com.example.factviewer.presentation.factdetailsfragment.FactDetailsFragment
 import com.example.factviewer.presentation.common.ItemSelectorPresenter
 import com.example.factviewer.presentation.common.LikePresenter
 import com.example.factviewer.presentation.common.ItemSelectorView
@@ -70,9 +69,7 @@ class FactsListFragment(private val animal: String) : MvpAppCompatFragment(),
     }
 
     override fun onItemSelected(position: Int, id: String) {
-        FragmentUtils.replaceFragment(activity as MainActivity,
-            FactDetailsFragment(id), R.id.mainFrame, true)
-
+        fragmentRouter.replace(Screens.FRAGMENTS.DETAILS_FRAGMENT, id)
     }
 
     override fun addFactsList(list: List<AnimalFact>) {

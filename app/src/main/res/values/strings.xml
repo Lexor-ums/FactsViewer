@@ -9,7 +9,7 @@
 
     <string name="menu_cats">Cats</string>
     <string name="menu_dogs">Dogs</string>
-    <string name="menu_nails">Nails</string>
+    <string name="menu_nails">Snails</string>
     <string name="menu_horses">Horses</string>
     <string name="menu_chosen">Chosen</string>
 </resources>

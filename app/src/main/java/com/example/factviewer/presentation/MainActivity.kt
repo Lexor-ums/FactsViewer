@@ -8,12 +8,18 @@ import com.google.android.material.navigation.NavigationView
 import androidx.appcompat.widget.Toolbar
 import android.view.Menu
 import com.arellomobile.mvp.MvpAppCompatActivity
-import com.example.calculator.utils.FragmentUtils
+import com.arellomobile.mvp.presenter.InjectPresenter
+import com.example.factviewer.MainApplication.Companion.fragmentRouter
 import com.example.factviewer.R
-import com.example.factviewer.presentation.factslistfragment.FactsListFragment
-import com.example.factviewer.utils.*
+import com.example.factviewer.presentation.common.ItemSelectorView
+import kotlinx.android.synthetic.main.activity_main.*
 
-class MainActivity : MvpAppCompatActivity(), NavigationView.OnNavigationItemSelectedListener{
+class MainActivity : MvpAppCompatActivity(), MainActivityView, ItemSelectorView, NavigationView.OnNavigationItemSelectedListener{
+
+    @InjectPresenter
+    lateinit var presenter: MainActivityPresenter
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,7 +28,7 @@ class MainActivity : MvpAppCompatActivity(), NavigationView.OnNavigationItemSele
         setSupportActionBar(toolbar)
 
         val drawerLayout: androidx.drawerlayout.widget.DrawerLayout = findViewById(R.id.drawer_layout)
-        val navView: NavigationView = findViewById(R.id.nav_view)
+        val navView: NavigationView = nav_view
         val toggle = ActionBarDrawerToggle(
             this, drawerLayout, toolbar,
             R.string.navigation_drawer_open,
@@ -30,12 +36,16 @@ class MainActivity : MvpAppCompatActivity(), NavigationView.OnNavigationItemSele
         )
         drawerLayout.addDrawerListener(toggle)
         toggle.syncState()
-
         navView.setNavigationItemSelectedListener(this)
+        fragmentRouter.initRouter(
+            supportFragmentManager,
+            R.id.mainFrame,
+            ::finishActivity
+        )
     }
 
     override fun onBackPressed() {
-        val drawerLayout: androidx.drawerlayout.widget.DrawerLayout = findViewById(R.id.drawer_layout)
+        val drawerLayout: androidx.drawerlayout.widget.DrawerLayout = drawer_layout
         if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
             drawerLayout.closeDrawer(GravityCompat.START)
         } else {
@@ -62,19 +72,21 @@ class MainActivity : MvpAppCompatActivity(), NavigationView.OnNavigationItemSele
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         // Handle navigation view item clicks here.
         when (item.itemId) {
-            R.id.nav_cats -> FragmentUtils.replaceFragment(this,
-                FactsListFragment(ANIMAL_CATS), R.id.mainFrame, false)
-            R.id.nav_dogs -> FragmentUtils.replaceFragment(this,
-                FactsListFragment(ANIMAL_DOGS), R.id.mainFrame, false)
-            R.id.nav_nails -> FragmentUtils.replaceFragment(this,
-                FactsListFragment(ANIMAL_SNAILS), R.id.mainFrame, false)
-            R.id.nav_horses-> FragmentUtils.replaceFragment(this,
-                FactsListFragment(ANIMAL_HORSES), R.id.mainFrame, false)
-            R.id.nav_chosen-> FragmentUtils.replaceFragment(this,
-                FactsListFragment(ANIMAL_CHOSEN), R.id.mainFrame, false)
+            R.id.nav_cats -> presenter.onListFragmentSelected("cat")
+            R.id.nav_dogs -> presenter.onListFragmentSelected("dog")
+            R.id.nav_nails -> presenter.onListFragmentSelected("snail")
+            R.id.nav_horses -> presenter.onListFragmentSelected("horse")
+            R.id.nav_chosen -> presenter.onListFragmentSelected("chosen")
         }
-        val drawerLayout: androidx.drawerlayout.widget.DrawerLayout = findViewById(R.id.drawer_layout)
+        val drawerLayout: androidx.drawerlayout.widget.DrawerLayout = drawer_layout
         drawerLayout.closeDrawer(GravityCompat.START)
         return true
+    }
+    private fun finishActivity() {
+        finish()
+    }
+
+    override fun onItemSelected(position: Int, id: String) {
+        presenter.onDetailsSelected(id)
     }
 }
